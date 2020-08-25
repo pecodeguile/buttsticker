@@ -8,8 +8,8 @@ services:
       - ./tickerdata:/usr/share/tickerdata
     networks:
       - net
-    ports:
-      - "8080:80"
+    expose:
+      - "80"
     environment:
       - VIRTUAL_HOST=buttsticker.byteporter.com
       - LETSENCRYPT_HOST=buttsticker.byteporter.com
