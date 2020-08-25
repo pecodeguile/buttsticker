@@ -12,7 +12,7 @@ import (
     "io/ioutil"
     "math/rand"
 
-    "github.com/gorilla/handlers"
+//    "github.com/gorilla/handlers"
     "github.com/gorilla/mux"
 )
 
@@ -24,7 +24,7 @@ type buttstickerHandler struct {
 func (bh buttstickerHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
     w.Header().Set("Vary", "Accept-Encoding")
 
-    tickerJson, err := os.Open("/usr/share/tickerdata/tickers.json")
+    tickerJson, err := os.Open(filepath.Join(bh.contentDir, "tickers.json"))
     if err != nil {
         fmt.Fprintf(w, err.Error())
     }
@@ -40,7 +40,7 @@ func (bh buttstickerHandler) ServeHTTP(w http.ResponseWriter, req *http.Request)
 
 func main() {
     router := mux.NewRouter()
-    router.Handle("/", handlers.CompressHandler(buttstickerHandler{nil, filepath.Clean(".")})).Methods("GET")
+    router.Handle("/", buttstickerHandler{nil, "/usr/share/tickerdata"}).Methods("GET")
     http.Handle("/", router)
 
     log.Fatal(http.ListenAndServe(strings.Join([]string{":", "80"}, ""), router));
