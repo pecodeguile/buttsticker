@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  httpd:
+    image: debian:buster-slim
+    volumes:
+      - ./buttstickerapi:/bin/buttstickerapi:ro
+      - ./tickerdata:/usr/share/tickerdata
+    networks:
+      - net
+    ports:
+      - "8080:80"
+    environment:
+      - VIRTUAL_HOST=buttsticker.byteporter.com
+      - LETSENCRYPT_HOST=buttsticker.byteporter.com
+      - LETSENCRYPT_EMAIL=webmaster@byteporter.com
+    command: ["/bin/buttstickerapi"]
+
+networks:
+  net:
+    external:
+      name: docker-reverse-proxy_net
